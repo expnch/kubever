@@ -1,5 +1,5 @@
 # kubever
-Quick script to print out running versions of Kubernetes containers.
+Simple script to print out running versions of Kubernetes containers.
 
 Dependencies: `jq`, `kubectl`
 
