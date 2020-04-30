@@ -47,7 +47,7 @@ while getopts ":l:n:t:v" opt; do
 done
 shift $((OPTIND -1))
 
-search=$1; shift  # Remove 'pip' from the argument list
+search=${1-""}
 
 # Fetch Kubernetes data
 ## TODO: correctly display pods with multiple containers
