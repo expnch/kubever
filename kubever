@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Default parameters
+types="deployment,statefulset,job"
+verbose=false
+optstring=""
+
+# Read command-line arguments
+# With gratitude to: https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
+while getopts ":l:n:t:v" opt; do
+  case ${opt} in
+    h)
+      echo "Usage:"
+      echo "    $0 -h                      Display this help message."
+      echo "    $0 -v                      Verbose - print resource types."
+      echo "    $0 -l <key>=<value>        Filter by Kubernetes label."
+      echo "    $0 -n <namespace>          Use a different namespace.  Defaults to current context."
+      echo "    $0 -t <type>[,<type>]      Filter by resource types.  Defaults to `deployment,statefulset,job`"
+      echo "    $0 <search term>           Filter output by search term."
+      exit 0
+      ;;
+    l ) 
+      optstring+=" -l $OPTARG"
+      ;;
+    n )
+      optstring+=" -n $OPTARG"
+      ;;
+    t )
+      types=$OPTARG 
+      ;;
+    v )
+      verbose=true
+      ;;
+    \? )
+      echo "Unknown option: -$OPTARG" 1>&2
+      echo "Usage: $0 [-h][-v] [-l labels] [-n namespace] [-t type[,type]] [search term]"
+      echo "For more details: $0 -h"
+      exit 1
+      ;;
+    : )
+      echo "Invalid option: -$OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+search=$1; shift  # Remove 'pip' from the argument list
+
+# Fetch Kubernetes data
+## TODO: correctly display pods with multiple containers
+if [ "$verbose" = true ]; then
+  header=$' TYPE, NAME, VERSION\n--------------------,--------------------,--------------------\n'
+  data=$(kubectl get $types -o json $optstring | jq -r '(.items[] | [.kind, .spec.template.spec.containers[].name, .spec.template.spec.containers[].image]) | @csv' | tr '\"' ' ')
+else
+  header=$' NAME, VERSION\n--------------------,--------------------\n'
+  data=$(kubectl get $types -o json $optstring | jq -r '(.items[].spec.template.spec.containers[] | [.name, .image]) | @csv' | tr '\"' ' ')
+fi
+
+## TODO: use startswith filter in `jq` to only match by resource name
+if [ -n "$search" ]; then
+  data=$(echo "$data" | grep "$search")
+fi
+
+# Print result
+echo "$header$data" | column -s ',' -t
