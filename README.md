@@ -1,5 +1,5 @@
 # kubever
-Simple script to print the container images of running Kubernetes deployments, stateful sets, and jobs.
+Simple script to print the container image tags of running Kubernetes deployments, stateful sets, and jobs.
 
 Dependencies: `jq`, `kubectl`
 
