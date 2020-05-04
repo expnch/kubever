@@ -16,7 +16,7 @@ Usage:
 
 Example:
 ```
-$ k get po
+$ kubectl get po
 NAME                                READY   STATUS    RESTARTS   AGE
 nginx-deployment-7fd6966748-486b6   1/1     Running   0          1d
 nginx-deployment-7fd6966748-f9jsj   1/1     Running   0          1d
