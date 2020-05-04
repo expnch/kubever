@@ -1,5 +1,5 @@
 # kubever
-Simple script to print the container image tags of running Kubernetes deployments, stateful sets, and jobs.
+Simple script to print the container image tags of running Kubernetes Deployments, StatefulSets, DaemonSets, and Jobs.
 
 Dependencies: `jq`, `kubectl`
 
@@ -26,6 +26,11 @@ $ kubever
  NAME                  VERSION
 --------------------  --------------------
  nginx                 nginx:1.14.2 
+
+$ kubever -v
+ TYPE                  NAME                  VERSION
+--------------------  --------------------  --------------------
+ Deployment            nginx                 nginx:1.14.2
 
 $ kubever -n kube-system
  NAME                  VERSION
