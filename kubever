@@ -1,4 +1,20 @@
 #!/usr/bin/env bash
+#  _          _
+# | |        | |
+# | | ___   _| |__   _____   _____ _ __
+# | |/ / | | | '_ \ / _ \ \ / / _ \ '__|
+# |   <| |_| | |_) |  __/\ V /  __/ |
+# |_|\_\\__,_|_.__/ \___| \_/ \___|_|
+#   
+# Quick script to print out running versions of Kubernetes containers.
+#
+# Usage:
+#   kubever -h                      Display this help message."
+#   kubever -v                      Verbose - print resource types."
+#   kubever -l <key>=<value>        Filter by Kubernetes label."
+#   kubever -n <namespace>          Use a different namespace.  Defaults to current context."
+#   kubever -t <type>[,<type>]      Filter by resource types.  Defaults to `deployment,statefulset,job`"
+#   kubever <search term>           Filter output by search term."
 
 set -euo pipefail
 
